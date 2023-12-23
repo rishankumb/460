@@ -1,0 +1,200 @@
+<html>
+  <head>
+    <style>
+      html, body { 
+        background-color:#000;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden !important;  
+      }
+    </style>
+    
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script src="https://mrdoob.github.io/stats.js/build/stats.min.js"></script>
+    <script type="text/javascript" src="https://get.goxtk.com/xtk_xdat.gui.js"></script>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@latest/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@latest/examples/jsm/"
+      }
+    }
+    </script>
+
+    <script type="module">
+
+      import * as THREE from 'three';
+      import { OrbitControls } from 'three/addons/controls/OrbitControls.js';    
+
+
+      var scene, camera, renderer, ambientLight, light, controls, sphere;
+
+      window['SCENE'] = {
+
+          'Floor_1': false,
+          'Floor_2': false,
+          'Floor_3': false,
+          'UL': false,
+          'Front_Desk': false,
+          
+          'Floor_1_active': function() {
+            window['SCENE']['Floor_1'] = true;
+            window['SCENE']['Floor_2'] = false;
+            window['SCENE']['Floor_3'] = false;
+            window['SCENE']['Front_Desk'] = false;
+            window['SCENE']['UL'] = false;
+      },
+      'Floor_2_active': function() {
+            window['SCENE']['Floor_1'] = false;
+            window['SCENE']['Floor_2'] = true;
+            window['SCENE']['Floor_3'] = false;
+            window['SCENE']['Front_Desk'] = false;
+            window['SCENE']['UL'] = false;
+      },
+      'Floor_3_active': function() {
+            window['SCENE']['Floor_1'] = false;
+            window['SCENE']['Floor_2'] = false;
+            window['SCENE']['Floor_3'] = true;
+            window['SCENE']['Front_Desk'] = false;
+            window['SCENE']['UL'] = false;
+      },
+      'Front_Desk_active': function() {
+            window['SCENE']['Floor_1'] = false;
+            window['SCENE']['Floor_2'] = false;
+            window['SCENE']['Floor_3'] = false;
+            window['SCENE']['Front_Desk'] = true;
+            window['SCENE']['UL'] = false;
+      },
+      'UL_active': function() {
+            window['SCENE']['Floor_1'] = false;
+            window['SCENE']['Floor_2'] = false;
+            window['SCENE']['Floor_3'] = false;
+            window['SCENE']['Front_Desk'] = false;
+            window['SCENE']['UL'] = true;
+      },
+
+
+      }
+
+      window.onload = function() {
+
+        scene = new THREE.Scene();
+
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
+        camera.position.set( 0, 0, 500);
+
+        renderer = new THREE.WebGLRenderer({ });
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( renderer.domElement );
+        
+        ambientLight = new THREE.AmbientLight(0x000000);
+        scene.add( ambientLight );
+
+        light = new THREE.DirectionalLight( 0xffffff, 5.0 );
+        light.position.set( -10, 100, -10 );
+        // light.position.multiplyScalar(5.0);
+        scene.add( light );
+
+
+
+        var geometry = new THREE.SphereGeometry( 500, 60, 40 );
+        // geometry.scale(-1,1,1)        
+
+        var texture = new THREE.TextureLoader().load( 'Floor1.jpg' );
+        var material = new THREE.MeshBasicMaterial( { map: texture,
+                                                      side: THREE.BackSide } );
+        var mesh = new THREE.Mesh( geometry, material );
+        mesh.visible=false;
+        scene.add( mesh );
+
+        var texture = new THREE.TextureLoader().load( 'Floor2.jpg' );
+        var material = new THREE.MeshBasicMaterial( { map: texture,
+                                                      side: THREE.BackSide } );
+        var mesh2 = new THREE.Mesh( geometry, material );
+        mesh2.visible=false;
+        scene.add( mesh2 );
+
+        var texture = new THREE.TextureLoader().load( 'Floor3.jpg' );
+        var material = new THREE.MeshBasicMaterial( { map: texture,
+                                                      side: THREE.BackSide } );
+        var mesh3 = new THREE.Mesh( geometry, material );
+        mesh3.visible=false;
+        scene.add( mesh3 );
+
+        var texture = new THREE.TextureLoader().load( 'Front_Desk.jpg' );
+        var material = new THREE.MeshBasicMaterial( { map: texture,
+                                                      side: THREE.BackSide } );
+        var mesh4 = new THREE.Mesh( geometry, material );
+        // mesh4.visible=false;
+        scene.add( mesh4 );
+
+        var texture = new THREE.TextureLoader().load( 'UL.jpg' );
+        var material = new THREE.MeshBasicMaterial( { map: texture,
+                                                      side: THREE.BackSide } );
+        var mesh5 = new THREE.Mesh( geometry, material );
+        mesh5.visible=false;
+        scene.add( mesh5 );
+
+        var gui = new dat.GUI();
+
+        gui.add(window.SCENE, 'Front_Desk_active').name('Front_Desk');
+        gui.add(window.SCENE, 'UL_active').name('UL');
+        gui.add(window.SCENE, 'Floor_1_active').name('Floor 1');
+        gui.add(window.SCENE, 'Floor_2_active').name('Floor 2');
+        gui.add(window.SCENE, 'Floor_3_active').name('Floor 3');
+        // gui.add(window.SCENE, 'Floor_4_active').name('Theater');
+
+        controls = new OrbitControls( camera, renderer.domElement );
+        animate();
+      };
+
+      function animate() {
+
+        requestAnimationFrame( animate );
+
+        if( window.SCENE.Floor_1){
+          scene.children[2].visible= true
+          scene.children[3].visible= false
+          scene.children[4].visible= false
+          scene.children[5].visible= false
+          scene.children[6].visible= false
+
+        }else if( window.SCENE.Floor_2){
+          scene.children[2].visible= false
+          scene.children[3].visible= true
+          scene.children[4].visible= false
+          scene.children[5].visible= false
+          scene.children[6].visible= false
+        }else if( window.SCENE.Floor_3){
+          scene.children[2].visible= false
+          scene.children[3].visible= false
+          scene.children[4].visible= true
+          scene.children[5].visible= false
+          scene.children[6].visible= false
+        }else if( window.SCENE.Front_Desk){
+          scene.children[2].visible= false
+          scene.children[3].visible= false
+          scene.children[4].visible= false
+          scene.children[5].visible= true
+          scene.children[6].visible= false
+        }else if( window.SCENE.UL){
+          scene.children[2].visible= false
+          scene.children[3].visible= false
+          scene.children[4].visible= false
+          scene.children[5].visible= false
+          scene.children[6].visible= true
+        }
+
+        controls.update();
+        renderer.render( scene, camera );
+
+      };
+
+
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
