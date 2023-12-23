@@ -1,0 +1,124 @@
+<html>
+  <head>
+    <style>
+      html, body { 
+        background-color:#000;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+        overflow: hidden !important;  
+      }
+    </style>
+    
+    <script async src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"></script>
+    <script src="https://mrdoob.github.io/stats.js/build/stats.min.js"></script>
+    <script type="text/javascript" src="https://get.goxtk.com/xtk_xdat.gui.js"></script>
+
+    <script type="importmap">
+    {
+      "imports": {
+        "three": "https://unpkg.com/three@latest/build/three.module.js",
+        "three/addons/": "https://unpkg.com/three@latest/examples/jsm/"
+      }
+    }
+    </script>
+
+    <script type="module">
+
+      import * as THREE from 'three';
+      import { OrbitControls } from 'three/addons/controls/OrbitControls.js';    
+
+
+      var scene, camera, renderer, ambientLight, light, controls, sphere;
+
+      window['SCENE'] = {
+      		'loc': "pano3.jpg",
+          'Ocean_view': false,
+
+      }
+
+      window.onload = function() {
+
+        scene = new THREE.Scene();
+
+        camera = new THREE.PerspectiveCamera(60, window.innerWidth / window.innerHeight, 1, 10000);
+        camera.position.set( 0, 0, 500);
+
+        renderer = new THREE.WebGLRenderer({ });
+        renderer.setSize( window.innerWidth, window.innerHeight );
+        document.body.appendChild( renderer.domElement );
+        
+        ambientLight = new THREE.AmbientLight(0x000000);
+        scene.add( ambientLight );
+
+        light = new THREE.DirectionalLight( 0xffffff, 5.0 );
+        light.position.set( -10, 100, -10 );
+        // light.position.multiplyScalar(5.0);
+        scene.add( light );
+
+
+
+        var geometry = new THREE.SphereGeometry( 500, 60, 40 );
+        // geometry.scale(-1,1,1)        
+
+        var texture = new THREE.TextureLoader().load( window.SCENE.loc );
+        // texture.load('pano1.jpg');
+        var material = new THREE.MeshBasicMaterial( { map: texture,
+                                                      side: THREE.BackSide } );
+        var mesh = new THREE.Mesh( geometry, material );
+        scene.add( mesh );
+
+        var texture = new THREE.TextureLoader().load( 'pano1.jpg' );
+        // texture.load('pano1.jpg');
+        var material = new THREE.MeshBasicMaterial( { map: texture,
+                                                      side: THREE.BackSide } );
+        var mesh2 = new THREE.Mesh( geometry, material );
+        mesh2.visible=false;
+        scene.add( mesh2 );
+
+        var gui = new dat.GUI();
+        gui.add(window.SCENE, 'Ocean_view');
+
+        // var sceneui = gui.addFolder('Scene');
+        // sceneui.add(light.position, 'x', -100, 100).name('Light X');
+        // sceneui.add(light.position, 'y', -100, 100).name('Light Y');
+        // sceneui.add(light.position, 'z', -100, 100).name('Light Z');
+        // sceneui.add(light, 'intensity', 1, 100).name('Light Intensity');
+        // sceneui.addColor(ambientLight, 'color').name('Ambient Light Color');
+        // sceneui.open();
+
+
+
+        controls = new OrbitControls( camera, renderer.domElement );
+
+
+        animate();
+
+
+      };
+
+      function animate() {
+
+        requestAnimationFrame( animate );
+
+        if( window.SCENE.Ocean_view){
+          // scene.vi
+          scene.children[2].visible= false
+          scene.children[3].visible= true
+
+        }else{
+          scene.children[2].visible= true
+          scene.children[3].visible= false
+        }
+
+        controls.update();
+        renderer.render( scene, camera );
+
+      };
+
+
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
