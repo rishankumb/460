@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>UMass Model</title>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0"
+    />
+    <!-- <link type="text/css" rel="stylesheet" href="main.css"> -->
+    <link rel="stylesheet" href="test.css" />
+    <style>
+      body{
+        overflow: hidden;
+      }
+	.popup {
+			background: transparent;
+		}
+      a {
+        color: blue;
+      }
+      .control-inactive button {
+        color: #888;
+      }
+      canvas {
+        display: block;
+        width: 100% !important;
+        height: 38rem !important;
+        touch-action: none;
+        border: solid;
+      }
+
+      .popup-close {
+        font-size: 20px; /* Adjust the size of the close icon */
+        cursor: pointer;
+      }
+    </style>
+
+    <script>
+      function showPopup(contentTitle) {
+    
+        if (contentTitle === "ISC Page") {
+          document.getElementById("isc").style.display = "block";
+        }
+        if (contentTitle === "CLARKS Page") {
+          document.getElementById("clarks").style.display = "block";
+        }
+        if (contentTitle === "CC Page") {
+          document.getElementById("cc").style.display = "block";
+        }
+        if (contentTitle === "RH Page") {
+          document.getElementById("rh").style.display = "block";
+        }
+        if (contentTitle === "M Page") {
+          document.getElementById("McCormack").style.display = "block";
+        }
+        if (contentTitle === "W Page") {
+          document.getElementById("Wheately").style.display = "block";
+        }
+        if (contentTitle === "Quinn") {
+          document.getElementById("Quinn").style.display = "block";
+        }
+        if (contentTitle === "Healey") {
+          document.getElementById("Healey").style.display = "block";
+        }
+        if (contentTitle === "Two Column Page") {
+          document.getElementById("popup").style.display = "block";
+        }
+      }
+
+
+      function hidePopup() {
+        document.getElementById("popup").style.display = "none";
+        document.getElementById("Quinn").style.display = "none";
+        document.getElementById("Healey").style.display = "none";
+        document.getElementById("Wheately").style.display = "none";
+        document.getElementById("McCormack").style.display = "none";
+        document.getElementById("isc").style.display = "none";
+        document.getElementById("clarks").style.display = "none";
+        document.getElementById("cc").style.display = "none";
+      }
+
+      function showImage(imageUrl) {
+        document.getElementById("popup-image").src = imageUrl;
+      }
+    </script>
+  </head>
+  <body>
+    <div  style="margin-left: 50%;">
+    <a href="./360/index.html" target="_blank"><img src="icon2.jpg" alt="Icon" style="width: 40px; height: 40px;">
+    </a></div>
+
+    <div id="container"></div>
+
+    <script src="https://mrdoob.github.io/stats.js/build/stats.min.js"></script>
+    <script
+      async
+      src="https://unpkg.com/es-module-shims@1.6.3/dist/es-module-shims.js"
+    ></script>
+    <script
+      type="text/javascript"
+      src="https://get.goxtk.com/xtk_xdat.gui.js"
+    ></script>
+
+    <script type="importmap">
+      {
+        "imports": {
+          "three": "https://unpkg.com/three@latest/build/three.module.js",
+          "three/addons/": "https://unpkg.com/three@latest/examples/jsm/"
+        }
+      }
+    </script>
+
+    <script type="module">
+      import * as THREE from "three";
+
+      import Stats from "three/addons/libs/stats.module.js";
+      import { GUI } from "three/addons/libs/lil-gui.module.min.js";
+      import { GLTFLoader } from "three/addons/loaders/GLTFLoader.js";
+      import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+      import { AnaglyphEffect } from "three/addons/effects/AnaglyphEffect.js";
+      import { VertexNormalsHelper } from "three/addons/helpers/VertexNormalsHelper.js";
+      import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
+
+      var scene, renderer, camera, stats, scene1, scene2;
+      var model, effect, clock, mixer;
+      var sky, sun;
+      var raycaster, mouse;
+
+      window["SCENE"] = {
+        anaglyph: false,
+        blender: null,
+        ocean: null,
+        rotate_blend: false,
+        do_rotate_blend: function () {
+          window["SCENE"]["rotate_blend"] = !window["SCENE"]["rotate_blend"];
+        },
+        "3dmodel": false,
+        do_3d: function () {
+          window["SCENE"]["3dmodel"] = !window["SCENE"]["3dmodel"];
+          if (window.SCENE["3dmodel"]) {
+            scene1 = scene2;
+          } else {
+            scene1 = scene;
+          }
+        },
+      };
+
+      init();
+
+      function init() {
+        const container = document.getElementById("container");
+        clock = new THREE.Clock();
+
+        scene = new THREE.Scene();
+        scene.background = new THREE.Color(0x71bce1);
+        scene.fog = new THREE.Fog(0xffffff, 1, 110); //0x7cfc00
+        scene2 = new THREE.Scene();
+        scene2.background = new THREE.Color(0x71bce1);
+
+        //raycaster
+        raycaster = new THREE.Raycaster();
+        mouse = new THREE.Vector2();
+
+        const hemiLight = new THREE.HemisphereLight(0xffffff, 0x8d8d8d, 3);
+        hemiLight.position.set(0, 20, 0);
+        scene.add(hemiLight);
+
+        const hemiLight2 = new THREE.HemisphereLight(0xffffff, 0x8d8d8d, 3);
+        hemiLight2.position.set(0, 20, 0);
+        scene2.add(hemiLight2);
+
+        const dirLight = new THREE.DirectionalLight(0xffffff, 3);
+        dirLight.position.set(3, 10, 10);
+        dirLight.castShadow = true;
+        dirLight.shadow.camera.top = 2;
+        dirLight.shadow.camera.bottom = -2;
+        dirLight.shadow.camera.left = -2;
+        dirLight.shadow.camera.right = 2;
+        dirLight.shadow.camera.near = 0.1;
+        dirLight.shadow.camera.far = 40;
+        scene.add(dirLight);
+
+        const dirLight2 = new THREE.DirectionalLight(0xffffff, 3);
+        dirLight2.position.set(3, 10, 10);
+        dirLight2.castShadow = true;
+        dirLight2.shadow.camera.top = 2;
+        dirLight2.shadow.camera.bottom = -2;
+        dirLight2.shadow.camera.left = -2;
+        dirLight2.shadow.camera.right = 2;
+        dirLight2.shadow.camera.near = 0.1;
+        dirLight2.shadow.camera.far = 40;
+        // scene.add( dirLight );
+        scene2.add(dirLight2);
+
+        // ground
+
+        const mesh = new THREE.Mesh(
+          new THREE.PlaneGeometry(200, 200),
+          new THREE.MeshPhongMaterial({ color: 0x006666, depthWrite: false })
+        );
+        mesh.rotation.x = -Math.PI / 2;
+        mesh.receiveShadow = true;
+        // scene.add( mesh );
+        // scene2.add( mesh );
+
+        const loader = new GLTFLoader();
+
+        const dloader = new DRACOLoader();
+
+        // Specify path to a folder containing WASM/JS decoding libraries.
+        dloader.setDecoderPath( 'https://www.gstatic.com/draco/versioned/decoders/1.5.6/' );
+        // THREE.DRACOLoader.setDecoderPath( 'https://www.gstatic.com/draco/versioned/decoders/1.5.6/' );
+        
+        // Optional: Pre-fetch Draco WASM/JS module.
+        // dloader.setDecoderConfig({type: 'js'});
+        // dloader.preload();
+        loader.setDRACOLoader(dloader);
+        // 
+
+
+        
+        loader.load("models/gltf/mapComp.glb", function (gltf) {
+          model = gltf.scene;
+          var blender = gltf.scenes[0].children[0];
+
+          model.translateZ(-45);
+          model.translateX(40);
+          // blender.scale.x = 30;
+
+          model.traverse(function (object) {
+            if (object.isMesh) object.castShadow = true;
+          });
+
+          scene.add(model);
+          window.SCENE.blender = model;
+
+          //folder
+          var gui = new dat.GUI();
+          // gui.add(camera, 'reset')
+
+          var sceneui = gui.addFolder("Scene");
+
+          gui.add(window.SCENE, "do_3d").name("3d");
+          sceneui.add(window.SCENE, "anaglyph");
+          sceneui.add(dirLight.position, "x", -100, 100).name("Light X");
+          sceneui.add(dirLight.position, "y", -100, 100).name("Light Y");
+          sceneui.add(dirLight.position, "z", -100, 100).name("Light Z");
+          sceneui.add(dirLight, "intensity", 1, 100).name("Light Intensity");
+
+          // sceneui.add(hemiLight, 'position').name('ALight Color');
+          // sceneui.addColor(hemiLight, 'color').name('Ground Light Color');
+          sceneui.addColor(hemiLight, 'groundColor').name('Ground Color');
+          sceneui.add(hemiLight, 'isHemisphereLight').name('Light Off');
+
+
+          var blenderui = gui.addFolder("Map");
+          // blenderui.open();
+          blenderui.add(window.SCENE, "do_rotate_blend").name("rotate!");
+
+        });
+
+        loader.load("models/gltf/ocean.glb", function (gltf) {
+          model = gltf.scene;
+          var blender = gltf.scenes[0].children[0];
+
+          // blender.scale.z = 2;
+          // blender.translateX(25);
+          blender.translateY(-5.5);
+          blender.translateZ(-30);
+          scene.add(model);
+          const animations = gltf.animations;
+          // animations.timeScale = 0.000001 ;
+          mixer = new THREE.AnimationMixer(model);
+          let clip = THREE.AnimationClip.findByName(animations, "PlaneAction");
+          // clip.timeScale = 0.1 ;
+          window.SCENE.ocean = gltf;
+          const action = mixer.clipAction(clip);
+          action.play();
+        });
+
+        loader.load("models/gltf/3dmapComp.glb", function (gltf) {
+          model = gltf.scene;
+          var blender = gltf.scenes[0].children[0];
+          // console.log(model);
+          model.translateZ(-30);
+          model.translateX(15);
+          scene2.add(model);
+        });
+
+        renderer = new THREE.WebGLRenderer({ antialias: true });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        renderer.shadowMap.enabled = true;
+        container.appendChild(renderer.domElement);
+        // console.log(renderer.domElement);
+
+        // setup the camera
+        var fov = 75;
+        var ratio = window.innerWidth / window.innerHeight;
+        var zNear = 1;
+        var zFar = 1000;
+        camera = new THREE.PerspectiveCamera(fov, ratio, zNear, zFar);
+        camera.position.set(42, 2, -45);
+        camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+        // camera.lookAt( 42, 2, 0);
+        // camera.rotation.z = 0
+        // camera.position.set(15, 55, -15 );
+
+        //Anaglyph
+        effect = new AnaglyphEffect(renderer);
+        effect.setSize(window.innerWidth, window.innerHeight);
+
+        const controls = new OrbitControls(camera, renderer.domElement);
+        controls.enablePan = false;
+        controls.enableZoom = true;
+        controls.minPolarAngle = Math.PI / 3;
+        controls.maxPolarAngle = Math.PI / 2;
+        controls.minAzimuthAngle = Math.PI / 2;
+        controls.maxAzimuthAngle = Math.PI;
+        controls.zoomSpeed = 0.1;
+        controls.minDistance = 50;
+        controls.maxDistance = 75;
+        controls.target.set(0, 1, 0);
+        controls.update();
+
+        // stats = new Stats();
+        // container.appendChild( stats.dom );
+
+        window.addEventListener("resize", onWindowResize);
+
+        // controls.addEventListener( "change", event => {
+        // console.log( controls.object.position );});
+        renderer.domElement.addEventListener("click", onClick, false);
+
+        if (window.SCENE["3dmodel"]) {
+          scene1 = scene2;
+        } else {
+          scene1 = scene;
+        }
+        animate();
+      }
+      function activateAction(action) {
+        const clip = action.getClip();
+        action.play();
+      }
+
+      function onClick() {
+        event.preventDefault();
+
+        mouse.x = (event.clientX / window.innerWidth) * 2 - 1;
+        mouse.y = -(event.clientY / window.innerHeight) * 2 + 1;
+
+        raycaster.setFromCamera(mouse, camera);
+
+        var intersects = raycaster.intersectObjects(scene1.children, true);
+
+        if (intersects.length > 0) {
+          // console.log('Intersection:', intersects[0].object);
+          // console.log('obj', intersects[0].object.name);
+          // if (intersects[0].object.name=='Plane003'){
+          // console.log(intersects[0].object.name);
+          // console.log(intersects[0].object.userData);
+          // }
+          if (intersects[0].object.name == "University_Hall") {
+            showPopup("Two Column Page");
+          }
+          if (intersects[0].object.name == "Quin") {
+            showPopup("Quinn");
+          }
+          if (intersects[0].object.name == "Healey") {
+            showPopup("Healey");
+          }
+          if (intersects[0].object.name == "Wheately") {
+            showPopup("W Page");
+          }
+          if (intersects[0].object.name == "McCormack") {
+            showPopup("M Page");
+          }
+          if (intersects[0].object.name == "ISC") {
+            showPopup("ISC Page");
+          }
+          if (intersects[0].object.name == "Clarks") {
+            showPopup("CLARKS Page");
+          }
+          if (intersects[0].object.name == "Campus_Center") {
+            showPopup("CC Page");
+          }
+        }
+      }
+
+      function onWindowResize() {
+        camera.aspect = window.innerWidth / window.innerHeight;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(window.innerWidth, window.innerHeight);
+      }
+
+      clock = new THREE.Clock();
+
+      function animate() {
+        // Render loop
+
+        requestAnimationFrame(animate);
+        if (window.SCENE.blender) {
+          if (window.SCENE.rotate_blend) {
+            // TODO .. setup 180 degree quaternion
+            var q = new THREE.Quaternion(
+              Math.sin(Math.PI / 2) * 0,
+              Math.sin(Math.PI / 2) * 1,
+              Math.sin(Math.PI / 2) * 0,
+              Math.cos(Math.PI / 2)
+            );
+            window.SCENE.blender.quaternion.slerp(q, 0.01);
+          } else {
+            // TODO reset quaternion to identity!
+            var q = new THREE.Quaternion(0, 0, 0, 1);
+            window.SCENE.blender.quaternion.slerp(q, 0.01);
+          }
+        }
+
+        // Get the time elapsed since the last frame, used for mixer update
+
+        const mixerUpdateDelta = clock.getDelta();
+
+        // Update the animation mixer, the stats panel, and render this frame
+
+        if (window.SCENE.ocean) {
+          // console.log(mixerUpdateDelta);
+          mixer.update(mixerUpdateDelta); //-.01
+        }
+
+        // stats.update();
+        // camera.lookAt(new THREE.Vector3(0, 0, 0));
+
+        if (window.SCENE.anaglyph) {
+          effect.render(scene1, camera);
+        } else {
+          renderer.render(scene1, camera);
+        }
+      }
+    </script>
+
+    <div id="popup" class="popup">
+      <span class="popup-close" onclick="hidePopup()">x</span>
+      <iframe id="iframe" src="details.html"></iframe>
+    </div>
+
+    <div id="Quinn" class="popup">
+      <span class="popup-close" onclick="hidePopup()">x</span>
+      <iframe id="iframe" src="detailsQuin.html"></iframe>
+    </div>
+
+    <div id="cc" class="popup">
+      <span class="popup-close" onclick="hidePopup()">x</span>
+      <iframe id="iframe" src="detailscc.html"></iframe>
+    </div>
+
+    <div id="Healey" class="popup">
+      <span class="popup-close" onclick="hidePopup()">x</span>
+      <iframe id="iframe" src="detailsHealey.html"></iframe>
+    </div>
+
+    <div id="Wheately" class="popup">
+      <span class="popup-close" onclick="hidePopup()">x</span>
+      <iframe id="iframe" src="detailswheatley.html"></iframe>
+    </div>
+    <div id="McCormack" class="popup">
+      <span class="popup-close" onclick="hidePopup()">x</span>
+      <iframe id="iframe" src="detailsMcc.html"></iframe>
+    </div>
+    <div id="isc" class="popup">
+      <span class="popup-close" onclick="hidePopup()">x</span>
+      <iframe id="iframe" src="detailsisc.html"></iframe>
+    </div>
+    <div id="clarks" class="popup">
+      <span class="popup-close" onclick="hidePopup()">x</span>
+      <iframe id="iframe" src="detailsclarks.html"></iframe>
+    </div>
+  </body>
+</html>

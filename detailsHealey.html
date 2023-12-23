@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+    }
+
+    #left-column {
+      flex: 2;
+      background-color: #f0f0f0;
+      overflow: hidden;
+      padding: 20px;
+      text-align: center;
+    }
+
+    #right-column a {
+      display: block;
+      text-decoration: none;
+      color: #333;
+      padding: 10px;
+      margin: 5px 0;
+      background-color: #ddd;
+      border-radius: 5px;
+      transition: background-color 0.3s ease;
+    }
+
+    #right-column a:hover {
+      background-color: #bbb;
+    }
+
+
+
+    #right-column {
+      width:20%;
+      flex: 1;
+      background-color: #e0e0e0;
+      overflow-y: scroll;
+      /* overflow: hidden; */
+      padding: 20px;
+    }
+
+    .right-row {
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+  </style>
+
+    <title>Two Column Page</title>
+  </head>
+  <body>
+    <div id="left-column">
+      <img src="Healey/Healey.jpg" alt="Healey Library" style="width: 58%; height: 95%; object-fit: cover; border-radius: 5%;">
+      <!-- <h1>Healey Library</h1>
+      <p>This is the larger left column.</p> -->
+      <!-- Add your content here -->
+    </div>
+
+    <div id="right-column" style="width:20%;
+    flex: 1;
+    background-color: #e0e0e0;
+    /* overflow: hidden; */
+    padding: 20px;">
+    <!-- <div class="right-row"> -->
+        <!-- <h2>Floor 1</h2> -->
+        <p>
+          <a href="javascript:void(0);" onclick="showDefaultImage()"
+            >Home</a
+          >
+        </p>
+      <!-- </div> -->
+
+      <!-- <div class="right-row"> -->
+        <!-- <h2>Floor 1</h2> -->
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Healey/090-Healey_page-0001.jpg')"
+            >LL</a
+          >
+        </p>
+      <!-- </div> -->
+
+      <!-- <div class="right-row"> -->
+        <!-- <h2>Floor 2</h2> -->
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Healey/090-Healey_page-0002.jpg')"
+            >UL</a
+          >
+        </p>
+      <!-- </div> -->
+
+      <!-- <div class="right-row"> -->
+        <!-- <h2>Floor 3</h2> -->
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Healey/090-Healey_page-0003.jpg')"
+            >Floor 1</a
+          >
+        </p>
+      <!-- </div> -->
+
+      <!-- <div class="right-row"> -->
+        <!-- <h2>Floor 4</h2> -->
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Healey/090-Healey_page-0004.jpg')"
+            >Floor 2</a
+          >
+        </p>
+
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Healey/090-Healey_page-0005.jpg')"
+            >Floor 3</a
+          >
+        </p>
+      <!-- </div> -->
+
+      <!-- <div class="right-row"> -->
+        <!-- <h2>Floor 2</h2> -->
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Healey/090-Healey_page-0006.jpg')"
+            >Floor 4</a
+          >
+        </p>
+      <!-- </div> -->
+
+      <!-- <div class="right-row"> -->
+        <!-- <h2>Floor 3</h2> -->
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Healey/090-Healey_page-0007.jpg')"
+            >Floor 5</a
+          >
+        </p>
+      <!-- </div> -->
+
+      <!-- <div class="right-row"> -->
+        <!-- <h2>Floor 4</h2> -->
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Healey/090-Healey_page-0008.jpg')"
+            >Floor 6</a
+          >
+        </p>
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Healey/090-Healey_page-0009.jpg')"
+            >Floor 7</a
+          >
+        </p>
+      <!-- </div> -->
+
+      <!-- <div class="right-row"> -->
+        <!-- <h2>Floor 2</h2> -->
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Healey/090-Healey_page-0010.jpg')"
+            >Floor 8</a
+          >
+        </p>
+      <!-- </div> -->
+
+      <!-- <div class="right-row"> -->
+        <!-- <h2>Floor 3</h2> -->
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Healey/090-Healey_page-0011.jpg')"
+            >Floor 9</a
+          >
+        </p>
+      <!-- </div> -->
+
+      <!-- <div class="right-row"> -->
+        <!-- <h2>Floor 4</h2> -->
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Healey/090-Healey_page-0012.jpg')"
+            >Floor 10</a
+          >
+        </p>
+      <!-- </div> -->
+      <p>
+        <a href="javascript:void(0);" onclick="showImage('Healey/090-Healey_page-0013.jpg')"
+          >Floor 11</a
+        >
+      </p>
+
+      <!-- <div class="right-row"> -->
+        <!-- <h2>3D model</h2> -->
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('uhall.png')"
+            >3D Model</a
+          >
+        </p>
+      <!-- </div> -->
+
+      <!-- Repeat as needed -->
+    </div>
+  </body>
+  <script>
+    function showDefaultImage() {
+      var imageContainer = document.getElementById("left-column");
+      imageContainer.innerHTML =
+        '<img src="Healey/Healey.jpg" alt="Healey Library" style="width: 58%; height: 95%; object-fit: cover; border-radius: 5%;">';
+    }
+
+    function showImage(imageUrl) {
+      var imageContainer = document.getElementById("left-column");
+      imageContainer.innerHTML =
+        '<img src="' +
+        imageUrl +
+        '" alt="Image" style="width: 100%; height:100%; object-fit: fill;">';
+    }
+  </script>
+</html>
