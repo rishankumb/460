@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+    }
+
+    #left-column {
+      flex: 2;
+      background-color: #f0f0f0;
+      overflow: hidden;
+      padding: 20px;
+      text-align: center;
+    }
+    /* #image-container {
+      max-width: 100%;
+      max-height: 400px; /* Set a maximum height if needed */
+      /* overflow: hidden; */
+    /* } */ */
+
+    /* # {
+      width: 100%;
+      height: 100%;
+      object-fit: fill; /* or contain, fill, etc. depending on your requirement */
+    /* } */ */
+
+    #right-column {
+      width:20%;
+      flex: 1;
+      background-color: #e0e0e0;
+      /* overflow-y: scroll; */
+      overflow: hidden;
+      padding: 20px;
+    }
+
+    .right-row {
+      margin-bottom: 15px;
+      border: 1px solid #ccc;
+      padding: 10px;
+    }
+  </style>
+
+    <title>Two Column Page</title>
+  </head>
+  <body>
+    <div id="left-column">
+      <h1>Residence Hall</h1>
+      <p>This is the larger left column.</p>
+      <!-- Add your content here -->
+    </div>
+
+    <div id="right-column" style="width:20%;
+    flex: 1;
+    background-color: #e0e0e0;
+    overflow: hidden;
+    padding: 20px;">
+    <!-- <div class="right-row"> -->
+        <!-- <h2>Floor 1</h2> -->
+        <p>
+          <a href="javascript:void(0);" onclick="showDefaultImage()"
+            >Home</a
+          >
+        </p>
+      <!-- </div> -->
+
+      <!-- <div class="right-row"> -->
+        <!-- <h2>Floor 1</h2> -->
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Residencehall/600-Residence-Hall_page-0001.jpg')"
+            >Floor 1</a
+          >
+        </p>
+
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Residencehall/600-Residence-Hall_page-0002.jpg')"
+            >Floor 2</a
+          >
+        </p>
+
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Residencehall/600-Residence-Hall_page-0003.jpg')"
+            >Floor 3</a
+          >
+        </p>
+
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Residencehall/600-Residence-Hall_page-0004.jpg')"
+            >Floor 4</a
+          >
+        </p>
+
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Residencehall/600-Residence-Hall_page-0005.jpg')"
+            >Floor 5</a
+          >
+        </p>
+
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('Residencehall/600-Residence-Hall_page-0006.jpg')"
+            >Floor 6</a
+          >
+        </p>
+
+        <p>
+          <a href="javascript:void(0);" onclick="showImage('uhall.png')"
+            >3D Model</a
+          >
+        </p>
+
+    </div>
+  </body>
+  <script>
+    function showImage(imageUrl) {
+      var imageContainer = document.getElementById("left-column");
+      imageContainer.innerHTML =
+        '<img src="' +
+        imageUrl +
+        '" alt="Image" style="width: 100%; height:100%; object-fit: fill;">';
+    }
+  </script>
+</html>

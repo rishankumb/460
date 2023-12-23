@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="test.css" />
+    <title>Link Popup Example</title>
+    <script>
+      function showPopup(contentTitle) {
+        if (contentTitle === "CC Page") {
+          document.getElementById("cc").style.display = "block";
+          document.getElementById("overlay").style.display = "block";
+        }
+        if (contentTitle === "ISC Page") {
+          document.getElementById("isc").style.display = "block";
+          document.getElementById("overlay").style.display = "block";
+        }
+        if (contentTitle === "CLARKS Page") {
+          document.getElementById("clarks").style.display = "block";
+          document.getElementById("overlay").style.display = "block";
+        }
+        if (contentTitle === "RH Page") {
+          document.getElementById("rh").style.display = "block";
+          document.getElementById("overlay").style.display = "block";
+        }
+        if (contentTitle === "M Page") {
+          document.getElementById("McCormack").style.display = "block";
+          document.getElementById("overlay").style.display = "block";
+        }
+        if (contentTitle === "W Page") {
+          document.getElementById("Wheatley").style.display = "block";
+          document.getElementById("overlay").style.display = "block";
+        }
+        if (contentTitle === "Two Column Page") {
+          document.getElementById("popup").style.display = "block";
+          document.getElementById("overlay").style.display = "block";
+        }
+      }
+
+      function hidePopup() {
+        document.getElementsByClassName("popup").style.display = "none";
+        document.getElementById("overlay").style.display = "none";
+      }
+
+      function showImage(imageUrl) {
+        document.getElementById("popup-image").src = imageUrl;
+      }
+    </script>
+  </head>
+  <body>
+    <a href="#" onclick="showPopup('Two Column Page')">Uhall</a>
+    <a href="#" onclick="showPopup('CC Page')">CC</a>
+    <a href="#" onclick="showPopup('ISC Page')">ISC</a>
+    <a href="#" onclick="showPopup('CLARKS Page')">Clarks Page</a>
+    <a href="#" onclick="showPopup('RH Page')">Residence Hall</a>
+    <a href="#" onclick="showPopup('W Page')">Wheatley Hall</a>
+    <a href="#" onclick="showPopup('M Page')">McCormack Hall</a>
+
+    <div class="overlay" onclick="hidePopup()"></div>
+
+    <div id="popup" class="popup">
+      <span class="popup-close" onclick="hidePopup()">x</span>
+      <iframe id="iframe" src="details.html"></iframe>
+    </div>
+    <div id="cc" class="popup">
+      <span class="popup-close" onclick="hidePopup()">Close</span>
+      <iframe id="iframe" src="detailscc.html"></iframe>
+    </div>
+    <div id="clarks" class="popup">
+      <span class="popup-close" onclick="hidePopup()">Close</span>
+      <iframe id="iframe" src="detailsclarks.html"></iframe>
+    </div>
+    <div id="isc" class="popup">
+      <span class="popup-close" onclick="hidePopup()">Close</span>
+      <iframe id="iframe" src="detailsisc.html"></iframe>
+    </div>
+    <div id="rh" class="popup">
+      <span class="popup-close" onclick="hidePopup()">Close</span>
+      <iframe id="iframe" src="detailsrh.html"></iframe>
+    </div>
+    <div id="McCormack" class="popup">
+      <span class="popup-close" onclick="hidePopup()">Close</span>
+      <iframe id="iframe" src="detailsMcc.html"></iframe>
+    </div>
+    <div id="Wheatley" class="popup">
+      <span class="popup-close" onclick="hidePopup()">Close</span>
+      <iframe id="iframe" src="detailswheatley.html"></iframe>
+    </div>
+  </body>
+</html>

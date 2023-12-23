@@ -120,7 +120,6 @@
       import { OrbitControls } from "three/addons/controls/OrbitControls.js";
       import { AnaglyphEffect } from "three/addons/effects/AnaglyphEffect.js";
       import { VertexNormalsHelper } from "three/addons/helpers/VertexNormalsHelper.js";
-      import { DRACOLoader } from 'three/addons/loaders/DRACOLoader.js';
 
       var scene, renderer, camera, stats, scene1, scene2;
       var model, effect, clock, mixer;
@@ -205,22 +204,7 @@
         // scene2.add( mesh );
 
         const loader = new GLTFLoader();
-
-        const dloader = new DRACOLoader();
-
-        // Specify path to a folder containing WASM/JS decoding libraries.
-        dloader.setDecoderPath( 'https://www.gstatic.com/draco/versioned/decoders/1.5.6/' );
-        // THREE.DRACOLoader.setDecoderPath( 'https://www.gstatic.com/draco/versioned/decoders/1.5.6/' );
-        
-        // Optional: Pre-fetch Draco WASM/JS module.
-        // dloader.setDecoderConfig({type: 'js'});
-        // dloader.preload();
-        loader.setDRACOLoader(dloader);
-        // 
-
-
-        
-        loader.load("models/gltf/mapComp.glb", function (gltf) {
+        loader.load("models/gltf/map.glb", function (gltf) {
           model = gltf.scene;
           var blender = gltf.scenes[0].children[0];
 
@@ -279,7 +263,7 @@
           action.play();
         });
 
-        loader.load("models/gltf/3dmapComp.glb", function (gltf) {
+        loader.load("models/gltf/3dmap.glb", function (gltf) {
           model = gltf.scene;
           var blender = gltf.scenes[0].children[0];
           // console.log(model);
