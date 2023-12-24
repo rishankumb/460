@@ -118,11 +118,13 @@
         scene.add( mesh4 );
 
         var gui = new dat.GUI();
+        var sceneui = gui.addFolder("University Hall");
+        sceneui.open();
 
-        gui.add(window.SCENE, 'Floor_1_active').name('Floor 1');
-        gui.add(window.SCENE, 'Floor_2_active').name('Floor 2');
-        gui.add(window.SCENE, 'Floor_3_active').name('Floor 3');
-        gui.add(window.SCENE, 'Floor_4_active').name('Floor 4');
+        sceneui.add(window.SCENE, 'Floor_1_active').name('Floor 1');
+        sceneui.add(window.SCENE, 'Floor_2_active').name('Floor 2');
+        sceneui.add(window.SCENE, 'Floor_3_active').name('Floor 3');
+        sceneui.add(window.SCENE, 'Floor_4_active').name('Floor 4');
 
         controls = new OrbitControls( camera, renderer.domElement );
         animate();
